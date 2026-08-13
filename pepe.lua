@@ -1,38 +1,30 @@
--- [[ PepeHub: Steal A Brainrot Рабочий Авто-Фарм ]] --
+-- [[ PepeHub v2.0: Fly & Infinite Jump ]] --
 
--- Красивое уведомление на экране
+-- Красивое уведомление
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "PepeHub UI 🐸",
-    Text = "Умный авто-фарм PepeHub запущен!",
+    Text = "Полет и Бесконечный прыжок активированы!",
     Duration = 5
 })
 
--- Функция авто-кражи с глубоким поиском скрытых событий
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Функция 1: Бесконечный прыжок (Жми Пробел и лети вверх)
+UserInputService.JumpRequest:Connect(function()
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+        LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+    end
+end)
+
+-- Функция 2: Супер-скорость персонажа (Ускоряем бег)
 task.spawn(function()
-    while task.wait(0.3) do
-        local Players = game:GetService("Players")
-        local LocalPlayer = Players.LocalPlayer
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-        -- Ищем любые скрытые папки Remotes или Events в игре
-        local remoteFolder = ReplicatedStorage:FindFirstChild("Remotes") or ReplicatedStorage:FindFirstChild("Events") or ReplicatedStorage
-
-        -- Пытаемся найти событие кражи по всем возможным названиям, которые используют разработчики
-        local stealRemote = remoteFolder:FindFirstChild("Steal") 
-            or remoteFolder:FindFirstChild("StealRemote") 
-            or remoteFolder:FindFirstChild("TakeBrainrot") 
-            or remoteFolder:FindFirstChild("ClickEvent")
-            or remoteFolder:FindFirstChild("MainRemote")
-
-        if stealRemote and stealRemote:IsA("RemoteEvent") then
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    -- Атакуем игрока кражей
-                    stealRemote:FireServer(player)
-                end
-            end
+    while task.wait(1) do
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = 32 -- Обычная скорость 16, мы делаем в 2 раза быстрее
         end
     end
 end)
 
-print("PepeHub успешно обновил модули авто-фарма!")
+print("PepeHub: Моды физики успешно загружены!")
