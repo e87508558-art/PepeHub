@@ -1,36 +1,33 @@
--- [[ PepeHub: Steal A Brainrot Script ]] --
+-- [[ PepeHub: Steal A Brainrot Рабочий Авто-Фарм ]] --
 
--- 1. Уведомление на экране при запуске
+-- Красивое уведомление на экране
 game:GetService("StarterGui"):SetCore("SendNotification", {
     Title = "PepeHub UI 🐸",
-    Text = "Скрипт PepeHub успешно активирован! Начинаем скам ауры...",
+    Text = "Умный авто-фарм PepeHub запущен!",
     Duration = 5
 })
 
--- База мемных фраз для спама в чат
-local brainrot_phrases = {
-    "Вы ограблены PepeHub! Минус аура, бро! 🐸",
-    "минус вайб. Твой мозг официально украден читом PepeHub.",
-    "REEEEEEE! Истинный Сигма забирает твои монеты! 💀",
-    "Ты потерял свои очки риддлера. PepeHub топ!"
-}
-
--- 2. Функция автоматической кражи (Auto-Steal)
+-- Функция авто-кражи с глубоким поиском скрытых событий
 task.spawn(function()
-    while task.wait(0.3) do -- Цикл срабатывает каждые 0.3 секунды
+    while task.wait(0.3) do
         local Players = game:GetService("Players")
         local LocalPlayer = Players.LocalPlayer
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-        -- Перебираем всех игроков на сервере
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                
-                -- Ищем событие кражи в игре (в большинстве режимов это RemoteEvent)
-                local replicated = game:GetService("ReplicatedStorage")
-                local stealRemote = replicated:FindFirstChild("StealRemote") or replicated:FindFirstChild("Steal") or replicated:FindFirstChild("RemoteEvent")
-                
-                if stealRemote then
-                    -- Автоматически отправляем запрос на кражу у этого игрока
+        -- Ищем любые скрытые папки Remotes или Events в игре
+        local remoteFolder = ReplicatedStorage:FindFirstChild("Remotes") or ReplicatedStorage:FindFirstChild("Events") or ReplicatedStorage
+
+        -- Пытаемся найти событие кражи по всем возможным названиям, которые используют разработчики
+        local stealRemote = remoteFolder:FindFirstChild("Steal") 
+            or remoteFolder:FindFirstChild("StealRemote") 
+            or remoteFolder:FindFirstChild("TakeBrainrot") 
+            or remoteFolder:FindFirstChild("ClickEvent")
+            or remoteFolder:FindFirstChild("MainRemote")
+
+        if stealRemote and stealRemote:IsA("RemoteEvent") then
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    -- Атакуем игрока кражей
                     stealRemote:FireServer(player)
                 end
             end
@@ -38,18 +35,4 @@ task.spawn(function()
     end
 end)
 
--- 3. Функция спама мемных фраз в чат
-task.spawn(function()
-    while task.wait(10) do -- Каждые 10 секунд пишет бред в чат
-        local chatRemote = game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents")
-        if chatRemote then
-            local sayRequest = chatRemote:FindFirstChild("SayMessageRequest")
-            if sayRequest then
-                local randomMessage = brainrot_phrases[math.random(1, #brainrot_phrases)]
-                sayRequest:FireServer(randomMessage, "All")
-            end
-        end
-    end
-end)
-
-print("PepeHub полностью загружен!")
+print("PepeHub успешно обновил модули авто-фарма!")
